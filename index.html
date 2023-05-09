@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>数据看板</title>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/echarts.min.js"></script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <script type="text/javascript" src="js/jquery.limarquee.js"></script>
+    <script type="text/javascript" src="js/jquery.cxselect.min.js"></script>
+
+
+
+    <link href="css/mainborad.css" rel="stylesheet" />
+    <link href="css/bigData.css" rel="stylesheet" />
+
+</head>
+<body>
+    <div style="background:#000d4a url(images/backimage.jpg) center top;">
+        <div class="back"></div>
+        <div class="head">
+            <div class="weather"><span id="showTime"></span></div>
+            <h1><a style="color: white">LP水泵线数可视化平台</a></h1>
+
+        </div>
+        <script>
+            var t = null;
+            t = setTimeout(time, 1000);//開始运行
+            function time() {
+                clearTimeout(t);//清除定时器
+                dt = new Date();
+                var y = dt.getFullYear();
+                var mt = dt.getMonth() + 1;
+                var day = dt.getDate();
+                var h = dt.getHours();//获取时
+                var m = dt.getMinutes();//获取分
+                var s = dt.getSeconds();//获取秒
+                document.getElementById("showTime").innerHTML = y + "年" + mt + "月" + day + "日" + h + "时" + m + "分" + s + "秒";
+          
+                t = setTimeout(time, 1000); //设定定时器，循环运行
+            }
+
+        </script>
+        <div class="mainbox">
+            <ul class="clearfix">
+                <li>
+                    <div class="boxall" style="height:400px;">
+                        <div class="alltitle">各机台产出</div>
+                        <div class="navboxall" id="echart5"></div>
+                    </div>
+
+                    <div class="boxall" style="height:260px;">
+                        <div class="alltitle">机台实时不良信息</div>
+                        <div class="navboxall">
+                            <div class="wraptit">
+                                <span>信息</span><span>机台</span>
+                            </div>
+                            <div class="wrap">
+                                <ul>
+                                    <li><p><span id="errStrSpan1"> </span><span id="errMSpan1"></span>
+                                    <li><p><span id="errStrSpan2"></span><span id="errMSpan2"></span>
+                                    <li><p><span id="errStrSpan3"></span><span id="errMSpan3"></span>
+                                    <li><p><span id="errStrSpan4"></span><span id="errMSpan4"></span>
+                                    <li><p><span id="errStrSpan5"></span><span id="errMSpan5"></span>
+                                    <li><p><span id="errStrSpan6"></span><span id="errMSpan6"></span>
+                                    <li><p><span id="errStrSpan7"></span><span id="errMSpan7"></span>
+                                    <li><p><span id="errStrSpan8"></span><span id="errMSpan8"></span>
+                                    <li><p><span id="errStrSpan9"></span><span id="errMSpan9"></span>
+                                    <li><p><span id="errStrSpan10"></span><span id="errMSpan10"></span>
+
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="boxall" style="height:260px;">
+                        <div class="alltitle">不良机台分布</div>
+
+                        <div class="navboxall" id="echart1"></div>
+                    </div>
+                </li>
+                <li>
+
+                    <div class="boxall" style="height:230px">
+                        <div class="clearfix navboxall" style="height: 100%">
+                            <div class="pulll_left num">
+                                <div class="numbt">总体生产情况<span>(单位：Pcs)</span></div>
+                                <div class="numtxt" id="totalCount"> </div>
+                            </div>
+                            <div class="pulll_right zhibiao">
+                                <div class="zb1"><span>良率比</span><div id="zb1"></div></div>
+                                <div class="zb2"><span>产出比</span><div id="zb2"></div></div>
+                                <div class="zb3"><span>完成率</span><div id="zb3"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="boxall" style="height:350px">
+                        <div class="alltitle">实时产出</div>
+                        <div class="navboxall" id="echart4"></div>
+
+                    </div>
+                    <div class="boxall" style="height:340px">
+                        <div class="alltitle">良率与产量</div>
+                        <div class="navboxall" id="echart3"></div>
+                    </div>
+                </li>
+                <li>
+                    <div class="boxall" style="height:300px">
+                        <div class="alltitle">异常TOP5</div>
+                        <div class="navboxall">
+                            <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <th scope="col">排名</th>
+                                        <th scope="col">异常原因</th>
+                                        <th scope="col">异常数量</th>
+                                        <th scope="col">异常占比</th>
+                                    </tr>
+                                    <tr>
+                                        <td><span>1</span></td>
+                                        <td id="errTop11"></td>
+                                        <td id="errTop12"><br></td>
+                                        <td id="errTop13"><br></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span>2</span></td>
+                                        <td id="errTop21"></td>
+                                        <td id="errTop22"></td>
+                                        <td id="errTop23"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><span>3</span></td>
+                                        <td id="errTop31"></td>
+                                        <td id="errTop32"></td>
+                                        <td id="errTop33"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span>4</span></td>
+                                        <td id="errTop41"></td>
+                                        <td id="errTop42"></td>
+                                        <td id="errTop43"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span>5</span></td>
+                                        <td id="errTop51"></td>
+                                        <td id="errTop52"></td>
+                                        <td id="errTop53">
+                                        <td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="boxall" style="height: 300px">
+                        <div class="alltitle">不良TOP5</div>
+                        <div class="navboxall">
+                            <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <th scope="col">排名</th>
+                                        <th scope="col">项目</th>
+                                        <th scope="col">机台</th>
+                                        <th scope="col">占比</th>
+                                    </tr>
+                                    <tr>
+                                        <td><span>1</span></td>
+                                        <td>读码</td>
+                                        <td>OP10<br></td>
+                                        <td>100%<br></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span>2</span></td>
+                                        <td>IOC</td>
+                                        <td>OP92</td>
+                                        <td>21%</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><span>3</span></td>
+                                        <td>DOC</td>
+                                        <td>OP213</td>
+                                        <td>12%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span>4</span></td>
+                                        <td>FTP</td>
+                                        <td>OP32</td>
+                                        <td>39%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span>5</span></td>
+                                        <td>TCP</td>
+                                        <td>OP4</td>
+                                        <td>9%</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <div class="boxall" style="height:320px">
+                        <div class="alltitle">异常占比</div>
+                        <div class="navboxall" id="echart2"></div>
+                    </div>
+
+
+                </li>
+            </ul>
+
+        </div>
+    </div>
+    <script>
+
+        $(function () {
+            $('.wrap,.adduser').liMarquee({
+                direction: 'down',//向上滚动
+                runshort: true,//内容不足时不滚动
+                scrollamount: 20//速度
+            });
+        });
+
+    </script>
+</body>
+</html>
